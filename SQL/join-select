@@ -1,0 +1,134 @@
+-- join select
+
+-- 1. Quais músicos pertencem a cada orquestra?
+SELECT o.nome AS orquestra, m.nome AS musico
+FROM Musico m
+JOIN grupoorquestral o ON m.id_orquestra = o.id_orquestra
+ORDER BY o.nome;
+
+-- 2. Quais músicos participaram da sinfonia "Ode à Alegria"?
+SELECT m.nome, p.funcao, s.nome AS sinfonia
+FROM Participacao p
+JOIN Musico m ON p.id_musico = m.id_musico
+JOIN Sinfonia s ON p.id_sinfonia = s.id_sinfonia
+WHERE s.nome = 'Ode à Alegria';
+
+-- 3. Quantos músicos existem por orquestra?
+SELECT o.nome AS orquestra, COUNT(m.id_musico) AS total_musicos
+FROM grupoorquestral o
+LEFT JOIN Musico m ON o.id_orquestra = m.id_orquestra
+GROUP BY o.nome;
+
+-- 4. Relação de instrumentos e os músicos aptos a tocá-los.
+SELECT i.nome AS instrumento, m.nome AS musico
+FROM MusicoInstrumento mi
+JOIN Instrumento i ON mi.id_instrumento = i.id_instrumento
+JOIN Musico m ON mi.id_musico = m.id_musico
+ORDER BY i.nome;
+
+-- 5. Lista de sinfonias tocadas por cada orquestra.
+SELECT o.nome AS orquestra, s.nome AS sinfonia
+FROM Orquestra_Sinfonia os
+JOIN grupoorquestral o ON os.id_orquestra = o.id_orquestra
+JOIN Sinfonia s ON os.id_sinfonia = s.id_sinfonia;
+
+-- 6. Quais músicos atuaram como maestros?
+SELECT DISTINCT m.nome
+FROM Participacao p
+JOIN Musico m ON p.id_musico = m.id_musico
+WHERE p.funcao LIKE '%maestro%';
+
+-- 7. Músicos que tocam mais de um instrumento.
+SELECT m.nome, COUNT(mi.id_instrumento) AS qtd_instrumentos
+FROM MusicoInstrumento mi
+JOIN Musico m ON mi.id_musico = m.id_musico
+GROUP BY m.nome
+HAVING COUNT(mi.id_instrumento) > 1;
+
+-- 8. Sinfonias compostas após 1900.
+SELECT nome, compositor, data_criacao
+FROM Sinfonia
+WHERE data_criacao > '1900-01-01';
+
+-- 9. Lista de compositores distintos do sistema.
+SELECT DISTINCT compositor
+FROM Sinfonia;
+
+-- 10. Músicos brasileiros que atuaram em mais de uma sinfonia.
+SELECT m.nome, COUNT(DISTINCT p.id_sinfonia) AS qtd_sinfonias
+FROM Participacao p
+JOIN Musico m ON p.id_musico = m.id_musico
+WHERE m.nacionalidade = 'Brasileiro'
+GROUP BY m.nome
+HAVING COUNT(DISTINCT p.id_sinfonia) > 1;
+
+-- 11. Orquestras que já tocaram sinfonias de "Beethoven".
+SELECT DISTINCT o.nome
+FROM Orquestra_Sinfonia os
+JOIN Sinfonia s ON os.id_sinfonia = s.id_sinfonia
+JOIN grupoorquestral o ON os.id_orquestra = o.id_orquestra
+WHERE s.compositor LIKE '%Beethoven%';
+
+-- 12. Músicos e a função que exerceram na sinfonia "Quarta Sinfonia".
+SELECT m.nome, p.funcao
+FROM Participacao p
+JOIN Musico m ON p.id_musico = m.id_musico
+JOIN Sinfonia s ON p.id_sinfonia = s.id_sinfonia
+WHERE s.nome = 'Quarta Sinfonia';
+
+-- 13. Orquestra com maior número de músicos.
+SELECT o.nome, COUNT(m.id_musico) AS total
+FROM grupoorquestral o
+JOIN Musico m ON m.id_orquestra = o.id_orquestra
+GROUP BY o.id_orquestra
+ORDER BY total DESC
+LIMIT 1;
+
+-- 14. Músicos nascidos antes de 1980.
+SELECT nome, data_nascimento
+FROM Musico
+WHERE data_nascimento < '1980-01-01';
+
+-- 15. Sinfonias com mais de 3 músicos participantes.
+SELECT s.nome, COUNT(p.id_musico) AS total_musicos
+FROM Sinfonia s
+JOIN Participacao p ON s.id_sinfonia = p.id_sinfonia
+GROUP BY s.id_sinfonia
+HAVING COUNT(p.id_musico) > 3;
+
+-- 16. Todos os músicos e seus instrumentos (mesmo quem não tem instrumentos cadastrados).
+SELECT m.nome AS musico, i.nome AS instrumento
+FROM Musico m
+LEFT JOIN MusicoInstrumento mi ON m.id_musico = mi.id_musico
+LEFT JOIN Instrumento i ON mi.id_instrumento = i.id_instrumento;
+
+-- 17. Orquestras fundadas após 2000.
+SELECT nome, data_criacao
+FROM grupoorquestral
+WHERE data_criacao > '2000-01-01';
+
+-- 18. Qual instrumento é mais utilizado por músicos?
+SELECT i.nome, COUNT(*) AS total_usos
+FROM MusicoInstrumento mi
+JOIN Instrumento i ON mi.id_instrumento = i.id_instrumento
+GROUP BY i.nome
+ORDER BY total_usos DESC;
+
+-- 19. Orquestras que já tocaram sinfonias com mais de 5 músicos.
+SELECT DISTINCT o.nome
+FROM Orquestra_Sinfonia os
+JOIN Sinfonia s ON os.id_sinfonia = s.id_sinfonia
+JOIN grupoorquestral o ON os.id_orquestra = o.id_orquestra
+WHERE s.id_sinfonia IN (
+  SELECT id_sinfonia
+  FROM Participacao
+  GROUP BY id_sinfonia
+  HAVING COUNT(id_musico) > 5
+);
+
+-- 20. Músicos com mais de 2 participações em sinfonias diferentes.
+SELECT m.nome, COUNT(DISTINCT p.id_sinfonia) AS qtd_sinfonias
+FROM Participacao p
+JOIN Musico m ON p.id_musico = m.id_musico
+GROUP BY m.nome
+HAVING COUNT(DISTINCT p.id_sinfonia) > 2;
