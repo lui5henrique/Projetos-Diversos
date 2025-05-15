@@ -1,0 +1,31 @@
+-- DELETE
+
+-- 11. Remover participação do músico 10 na sinfonia 2
+DELETE FROM Participacao WHERE id_musico = 10 AND id_sinfonia = 2;
+
+-- 12. Excluir relação de músico 3 com instrumento 2
+DELETE FROM MusicoInstrumento WHERE id_musico = 3 AND id_instrumento = 2;
+
+-- 13. Excluir uma orquestra (por exemplo, id 6 - Tóquio)
+DELETE FROM grupoorquestral WHERE id_orquestra = 6;
+
+-- 14. Excluir músico 9 do sistema
+DELETE FROM MusicoInstrumento WHERE id_musico = 5;
+
+-- 15. Remover instrumento 'Tímpano' (id 8)
+DELETE FROM Instrumento WHERE id_instrumento = 2;
+
+-- 16. Remover sinfonia nº 6 (Tchaikovsky)
+DELETE FROM Sinfonia WHERE id_sinfonia = 6;
+
+-- 17. Excluir relação entre orquestra 1 e sinfonia 5
+DELETE FROM Orquestra_Sinfonia WHERE id_orquestra = 1 AND id_sinfonia = 5;
+
+-- 18. Excluir músico 6 da lista de instrumentos
+DELETE FROM Musico_Instrumento WHERE id_musico = 6;
+
+-- 19. Remover todas participações do músico 4
+DELETE FROM Participacao WHERE id_musico = 4;
+
+-- 20. Deletar orquestra com cidade = 'Buenos Aires'
+DELETE FROM grupoorquestral WHERE cidade = 'Buenos Aires';
