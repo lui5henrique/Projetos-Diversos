@@ -1,0 +1,44 @@
+
+-- ALTERAÇÃO DE ESTRUTURAS
+
+-- 1. Adicionar uma nova coluna 'email' na tabela Musico
+ALTER TABLE Musico
+ADD email VARCHAR(100);
+
+-- 2. Alterar o tipo da coluna 'nome' na tabela Orquestra para aumentar o tamanho
+ALTER TABLE Orquestra
+MODIFY nome VARCHAR(150);
+
+-- 3. Adicionar uma coluna de telefone à tabela Orquestra
+ALTER TABLE Orquestra
+ADD telefone VARCHAR(20);
+
+-- 4. Remover a coluna 'telefone' da tabela Orquestra
+ALTER TABLE Orquestra
+DROP COLUMN telefone;
+
+-- 5. Renomear a coluna 'data_criacao' para 'data_fundacao' na tabela Orquestra
+ALTER TABLE Orquestra
+CHANGE data_criacao data_fundacao DATE;
+
+-- 6. Adicionar uma nova chave estrangeira à tabela Participacao referenciando Orquestra (ex: orquestra da participação)
+ALTER TABLE Participacao
+ADD id_orquestra INT;
+
+ALTER TABLE Participacao
+ADD CONSTRAINT fk_participacao_orquestra
+FOREIGN KEY (id_orquestra) REFERENCES Orquestra(id_orquestra);
+
+-- 7. Adicionar uma restrição UNIQUE ao campo 'nome' da tabela Instrumento
+ALTER TABLE Instrumento
+ADD CONSTRAINT unique_nome_instrumento UNIQUE (nome);
+
+-- 8. Renomear a tabela Musico_Instrumento para MusicoInstrumento
+RENAME TABLE Musico_Instrumento TO MusicoInstrumento;
+
+-- 9. Adicionar uma nova coluna 'genero_musical' na tabela Sinfonia
+ALTER TABLE Sinfonia
+ADD genero_musical VARCHAR(50);
+
+-- 10. Alterar o nome da tabela Orquestra para GrupoOrquestral
+RENAME TABLE Orquestra TO GrupoOrquestral;
