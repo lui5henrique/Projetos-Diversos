@@ -1,0 +1,76 @@
+-- VIEWS
+
+-- View 1: Músicos por Orquestra
+CREATE VIEW vw_musicos_por_grupoorquestral AS
+SELECT o.nome AS orquestra, m.nome AS musico
+FROM Musico m
+JOIN grupoorquestral o ON m.id_orquestra = o.id_orquestra;
+
+-- View 2: Participações de músicos na sinfonia "Ode à Alegria"
+CREATE VIEW vw_participantes_ode_alegria AS
+SELECT m.nome AS musico, p.funcao, s.nome AS sinfonia
+FROM Participacao p
+JOIN Musico m ON p.id_musico = m.id_musico
+JOIN Sinfonia s ON p.id_sinfonia = s.id_sinfonia
+WHERE s.nome = 'Ode à Alegria';
+
+-- View 3: Quantidade de músicos por orquestra
+CREATE VIEW vw_qtd_musicos_orquestra AS
+SELECT o.nome AS orquestra, COUNT(m.id_musico) AS total_musicos
+FROM grupoorquestral o
+LEFT JOIN Musico m ON o.id_orquestra = m.id_orquestra
+GROUP BY o.nome;
+
+-- View 4: Instrumentos tocados por músicos
+CREATE VIEW vw_musicos_instrumentos AS
+SELECT m.nome AS musico, i.nome AS instrumento
+FROM MusicoInstrumento mi
+JOIN Musico m ON mi.id_musico = m.id_musico
+JOIN Instrumento i ON mi.id_instrumento = i.id_instrumento;
+
+-- View 5: Sinfonias executadas por orquestras
+CREATE VIEW vw_sinfonias_por_orquestra AS
+SELECT o.nome AS orquestra, s.nome AS sinfonia
+FROM Orquestra_Sinfonia os
+JOIN grupoorquestral o ON os.id_orquestra = o.id_orquestra
+JOIN Sinfonia s ON os.id_sinfonia = s.id_sinfonia;
+
+-- View 6: Músicos com múltiplos instrumentos
+CREATE VIEW vw_multinstrumentistas AS
+SELECT m.nome AS musico, COUNT(mi.id_instrumento) AS qtd_instrumentos
+FROM MusicoInstrumento mi
+JOIN Musico m ON mi.id_musico = m.id_musico
+GROUP BY m.nome
+HAVING COUNT(mi.id_instrumento) > 1;
+
+-- View 7: Orquestra com mais músicos
+CREATE VIEW vw_orquestra_mais_musicos AS
+SELECT o.nome, COUNT(m.id_musico) AS total_musicos
+FROM grupoorquestral o
+JOIN Musico m ON o.id_orquestra = m.id_orquestra
+GROUP BY o.id_orquestra
+ORDER BY total_musicos DESC
+LIMIT 1;
+
+-- View 8: Músicos e suas participações por função e sinfonia
+CREATE VIEW vw_musico_funcao_sinfonia AS
+SELECT m.nome AS musico, p.funcao, s.nome AS sinfonia, p.data_inicio
+FROM Participacao p
+JOIN Musico m ON p.id_musico = m.id_musico
+JOIN Sinfonia s ON p.id_sinfonia = s.id_sinfonia;
+
+-- View 9: Instrumentos mais usados
+CREATE VIEW vw_instrumentos_mais_usados AS
+SELECT i.nome, COUNT(*) AS total_usos
+FROM MusicoInstrumento mi
+JOIN Instrumento i ON mi.id_instrumento = i.id_instrumento
+GROUP BY i.nome
+ORDER BY total_usos DESC;
+
+-- View 10: Músicos com mais de 2 participações
+CREATE VIEW vw_musicos_experientes AS
+SELECT m.nome, COUNT(DISTINCT p.id_sinfonia) AS qtd_sinfonias
+FROM Participacao p
+JOIN Musico m ON p.id_musico = m.id_musico
+GROUP BY m.nome
+HAVING COUNT(DISTINCT p.id_sinfonia) > 2;
