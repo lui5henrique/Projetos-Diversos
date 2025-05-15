@@ -1,0 +1,60 @@
+create database escola_musica2;
+use escola_musica2;
+
+CREATE TABLE Orquestra (
+    id_orquestra INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    cidade VARCHAR(100),
+    pais VARCHAR(100),
+    data_criacao DATE
+);
+
+CREATE TABLE Sinfonia (
+    id_sinfonia INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    compositor VARCHAR(100),
+    data_criacao DATE
+);
+
+CREATE TABLE Musico (
+    id_musico INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    identidade VARCHAR(20) UNIQUE,
+    nacionalidade VARCHAR(50),
+    data_nascimento DATE,
+    id_orquestra INT,
+    FOREIGN KEY (id_orquestra) REFERENCES Orquestra(id_orquestra)
+);
+
+CREATE TABLE Instrumento (
+    id_instrumento INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Musico_Instrumento (
+    id_musico INT,
+    id_instrumento INT,
+    PRIMARY KEY (id_musico, id_instrumento),
+    FOREIGN KEY (id_musico) REFERENCES Musico(id_musico),
+    FOREIGN KEY (id_instrumento) REFERENCES Instrumento(id_instrumento)
+);
+
+CREATE TABLE Orquestra_Sinfonia (
+    id_orquestra INT,
+    id_sinfonia INT,
+    PRIMARY KEY (id_orquestra, id_sinfonia),
+    FOREIGN KEY (id_orquestra) REFERENCES Orquestra(id_orquestra),
+    FOREIGN KEY (id_sinfonia) REFERENCES Sinfonia(id_sinfonia)
+);
+
+CREATE TABLE Participacao (
+    id_participacao INT PRIMARY KEY AUTO_INCREMENT,
+    id_musico INT,
+    id_sinfonia INT,
+    id_instrumento INT,
+    funcao VARCHAR(100),
+    data_inicio DATE,
+    FOREIGN KEY (id_musico) REFERENCES Musico(id_musico),
+    FOREIGN KEY (id_sinfonia) REFERENCES Sinfonia(id_sinfonia),
+    FOREIGN KEY (id_instrumento) REFERENCES Instrumento(id_instrumento)
+);
