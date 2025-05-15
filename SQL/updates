@@ -1,0 +1,31 @@
+-- UPDATES
+
+-- 1. Atualizar cidade da orquestra 1
+UPDATE grupoorquestral SET cidade = 'Campinas' WHERE id_orquestra = 1;
+
+-- 2. Atualizar nome da sinfonia 3
+UPDATE Sinfonia SET nome = 'Sinfonia Fantástica Revisada' WHERE id_sinfonia = 3;
+
+-- 3. Atualizar compositor da sinfonia 9
+UPDATE Sinfonia SET compositor = 'Almeida Prado' WHERE id_sinfonia = 9;
+
+-- 4. Corrigir nacionalidade do músico 2
+UPDATE Musico SET nacionalidade = 'Alemão' WHERE id_musico = 2;
+
+-- 5. Atualizar nome do instrumento 10
+UPDATE Instrumento SET nome = 'Trombone de Vara' WHERE id_instrumento = 10;
+
+-- 6. Trocar músico 5 de orquestra
+UPDATE Musico SET id_orquestra = 2 WHERE id_musico = 5;
+
+-- 7. Alterar função do músico 7 na sinfonia 9
+UPDATE Participacao SET funcao = 'Regente Assistente' WHERE id_musico = 7 AND id_sinfonia = 9;
+
+-- 8. Atualizar data de início da participação do músico 1
+UPDATE Participacao SET data_inicio = '2023-03-01' WHERE id_musico = 1 AND id_sinfonia = 1;
+
+-- 9. Adicionar um segundo instrumento para músico 4
+INSERT INTO MusicoInstrumento (id_musico, id_instrumento) VALUES (5);
+
+-- 10. Corrigir nome da orquestra 10
+UPDATE grupoorquestral SET nome = 'Orquestra Filarmônica Brasileira' WHERE id_orquestra = 10;
