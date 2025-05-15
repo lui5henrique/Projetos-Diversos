@@ -1,0 +1,30 @@
+-- DESTRUIÇÃO DAS ESTRUTURAS
+
+-- Seleciona o banco de dados
+USE escola_musica2;
+
+-- 1. DROP VIEWS (primeiro as views, pois podem depender das tabelas)
+DROP VIEW IF EXISTS vw_musicos_orquestras;
+DROP VIEW IF EXISTS vw_musico_instrumentos;
+DROP VIEW IF EXISTS vw_participacoes;
+DROP VIEW IF EXISTS vw_orquestra_sinfonia;
+
+-- 2. DROP PROCEDURES (se existirem)
+DROP PROCEDURE IF EXISTS exemplo_procedimento;
+
+-- 3. DROP FUNCTIONS (se existirem)
+DROP FUNCTION IF EXISTS exemplo_funcao;
+
+-- 4. DROP TABLES (na ordem inversa da criação para evitar erro de dependência)
+DROP TABLE IF EXISTS Participacao;
+DROP TABLE IF EXISTS Orquestra_Sinfonia;
+DROP TABLE IF EXISTS MusicoInstrumento; -- Nome renomeado em alteração anterior
+DROP TABLE IF EXISTS Musico_Instrumento; -- Caso não tenha renomeado
+DROP TABLE IF EXISTS Musico;
+DROP TABLE IF EXISTS Sinfonia;
+DROP TABLE IF EXISTS Instrumento;
+DROP TABLE IF EXISTS GrupoOrquestral; -- Nome alterado de Orquestra
+DROP TABLE IF EXISTS Orquestra;        -- Caso ainda exista com nome original
+
+-- 5 DROP DATABASE (Remover o próprio banco de dados)
+DROP DATABASE IF EXISTS escola_musica2;
